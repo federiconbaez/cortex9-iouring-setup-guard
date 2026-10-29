@@ -34,6 +34,11 @@ no se saltea en silencio.
 | LD_PRELOAD interposición real | fuera del MVP de hoy (API lista) |
 | Filtrado kernel de setup flags | no existe aún (pedido en RATIONALE) |
 
+## CI
+
+- `.github/workflows/ci.yml`: fmt + `clippy -D warnings` + `cargo test` + reproducción de la medición. Tiene que quedar verde.
+- `.github/workflows/enforce.yml`: corre `cargo run --bin iouring-setup-enforce` de verdad en el runner, sin `continue-on-error` ni `#[ignore]`. Falla con exit != 0 si `io_uring_setup` no funciona en el runner.
+
 ## Fuentes leídas
 
 - https://github.com/gvozdetsky/iouring-lab/blob/main/profile/RATIONALE.md

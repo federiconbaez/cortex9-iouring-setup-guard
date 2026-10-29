@@ -1,26 +1,29 @@
 name: ci
+
 on:
   push:
     branches: [main]
   pull_request:
+
 jobs:
   unit:
+    name: fmt + clippy + test + medición
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-          components: clippy
-      - run: cargo clippy --all-targets -- -D warnings
-      - run: cargo test --workspace
-  enforce:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-      - run: uname -a
-      - name: io_uring_setup must work (fail hard)
-        run: cargo run --bin iouring-setup-enforce
+          components: clippy, rustfmt
+      - name: kernel
+        run: uname -a
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: test
+        run: cargo test --workspace
+      - name: reproducir medición (1)
+        run: cargo run --quiet --bin iouring-setup-guard -- measure --runs 50
+      - name: reproducir medición (2)
+        run: cargo run --quiet --bin iouring-setup-guard -- catalog

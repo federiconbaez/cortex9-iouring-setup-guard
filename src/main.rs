@@ -1,10 +1,13 @@
 use clap::{Parser, Subcommand};
-use iouring_setup_guard::{embedded_catalog, try_setup, Guard};
 use iouring_setup_guard::flags;
+use iouring_setup_guard::{embedded_catalog, try_setup, Guard};
 use std::process::ExitCode;
 
 #[derive(Parser)]
-#[command(name = "iouring-setup-guard", about = "Allowlist de flags de io_uring_setup + catálogo residual")]
+#[command(
+    name = "iouring-setup-guard",
+    about = "Allowlist de flags de io_uring_setup + catálogo residual"
+)]
 struct Cli {
     #[command(subcommand)]
     cmd: Cmd,

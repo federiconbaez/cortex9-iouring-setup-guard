@@ -1,5 +1,5 @@
-use iouring_setup_guard::{embedded_catalog, try_setup, Decision, Guard};
 use iouring_setup_guard::flags;
+use iouring_setup_guard::{embedded_catalog, try_setup, Decision, Guard};
 
 #[test]
 fn measure_50_sqpoll_blocked() {

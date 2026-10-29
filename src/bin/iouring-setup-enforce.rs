@@ -3,8 +3,8 @@
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
-    let release = std::fs::read_to_string("/proc/sys/kernel/osrelease")
-        .unwrap_or_else(|_| "unknown".into());
+    let release =
+        std::fs::read_to_string("/proc/sys/kernel/osrelease").unwrap_or_else(|_| "unknown".into());
     println!("kernel={}", release.trim());
     match iouring_setup_guard::try_setup(&iouring_setup_guard::Guard::default(), 8, 0, true) {
         Ok(r) if r.fd_or_errno >= 0 => {

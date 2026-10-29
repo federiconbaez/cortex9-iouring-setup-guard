@@ -15,7 +15,12 @@ pub struct SetupResult {
     pub note: String,
 }
 
-pub fn try_setup(guard: &Guard, entries: u32, flags: u32, actually_call: bool) -> io::Result<SetupResult> {
+pub fn try_setup(
+    guard: &Guard,
+    entries: u32,
+    flags: u32,
+    actually_call: bool,
+) -> io::Result<SetupResult> {
     match guard.check(flags) {
         Decision::Deny { matched } => Ok(SetupResult {
             flags,
@@ -38,7 +43,8 @@ pub fn try_setup(guard: &Guard, entries: u32, flags: u32, actually_call: bool) -
             let mut params = vec![0u8; 256];
             // flags go at offset 0 of io_uring_params as __u32 flags
             params[0..4].copy_from_slice(&flags.to_le_bytes());
-            let fd = unsafe { libc::syscall(SYS_IO_URING_SETUP, entries as usize, params.as_mut_ptr()) };
+            let fd =
+                unsafe { libc::syscall(SYS_IO_URING_SETUP, entries as usize, params.as_mut_ptr()) };
             if fd < 0 {
                 let err = io::Error::last_os_error();
                 // SQPOLL often EPERM for unprivileged — document, don't silent-skip
